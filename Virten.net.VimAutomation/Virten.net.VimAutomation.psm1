@@ -234,7 +234,7 @@ Function Convert-ScsiCode {
 	2017-09-04 - v1.0 - Initial Release
 
 .LINK
-	http://www.virten.net
+	http://www.virten.net/2017/09/convert-scsicode-powershell-function/
 #>
 	Param(
 	[Parameter(Mandatory=$false)][String]$HostStatus,
