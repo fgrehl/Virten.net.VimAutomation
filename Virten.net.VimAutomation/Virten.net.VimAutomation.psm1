@@ -30,7 +30,7 @@ Function Get-VMHostVersion {
 	2017-09-04 - v1.0 - Initial Release
 
 .LINK
-	http://www.virten.net
+	http://www.virten.net/2017/09/get-vmhostversion-and-get-vmhostlatestversion-powershell-function/
 #>
 	[CmdletBinding()]
 	Param(
@@ -114,7 +114,7 @@ Function Get-VMHostLatestVersion {
 	Changelog:
 	2017-09-24 - v1.0 - Initial Release
 .LINK
-	http://www.virten.net
+	http://www.virten.net/2017/09/get-vmhostversion-and-get-vmhostlatestversion-powershell-function/
 #>
 	[CmdletBinding()]
 	Param(

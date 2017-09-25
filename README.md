@@ -16,7 +16,7 @@ Activate the module with `Import-Module Virten.net.VimAutomation -Force -Verbose
 
 |Function|Description|
 |----|----|
-|Get-VMHostVersion|Get detailed ESXi version information|
-|Get-VMHostLatestVersion|Check if an ESXi update is available|
+|[<b>Get-VMHostVersion</b>](http://www.virten.net/2017/09/get-vmhostversion-and-get-vmhostlatestversion-powershell-function/)|Get detailed ESXi version information|
+|[<b>Get-VMHostLatestVersion</b>](http://www.virten.net/2017/09/get-vmhostversion-and-get-vmhostlatestversion-powershell-function/)|Check if an ESXi update is available|
 |[<b>Convert-ScsiCode</b>](http://www.virten.net/2017/09/convert-scsicode-powershell-function/)|Decode SCSI Status Codes|
 
