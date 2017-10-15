@@ -12,7 +12,7 @@
 RootModule = 'Virten.net.VimAutomation'
 
 # Version number of this module.
-ModuleVersion = '1.2.0'
+ModuleVersion = '1.3.0'
 
 # ID used to uniquely identify this module
 GUID = 'c5696a1b-2faa-4b1b-a4ca-d4d993dbb013'

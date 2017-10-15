@@ -404,3 +404,147 @@ Function Convert-ScsiCode {
 	}
 }
 
+
+Function Get-VMLatencySensitivity {
+<#
+.SYNOPSIS
+	Get virtual machine latency sensitivity level.
+.DESCRIPTION
+	This function returns the latency sensitivity level of a virtual machine.
+	You can adjust the latency sensitivity of a virtual machine to optimize the scheduling delay 
+	for latency sensitive applications.
+	
+	For large inventories, consider the Get-VMLatencySensitivityBulk function.
+	
+	When the function is called without parameters it will return all Virtual Machines.
+.PARAMETER VM
+	Virtual Machine Object returned by the Get-VM cmdlet
+.EXAMPLE
+	Get-VMLatencySensitivity
+.EXAMPLE
+	Get-VM app01 | Get-VMLatencySensitivity
+.EXAMPLE
+	Get-VMLatencySensitivity |? {$_.LatencySensitivity -notmatch "normal"}
+.NOTES
+	Author:   Florian Grehl
+	Twitter:  @virten
+	Website:  www.virten.net
+	
+	Changelog:
+	2017-10-15 - v1.0 - Initial Release
+
+.LINK
+	http://www.virten.net/2017/10/get-and-set-vmlatencysensitivity-powershell-function/
+#>
+	[CmdletBinding()]
+	Param(
+		[Parameter(Mandatory=$false,ValueFromPipeline=$true)]$VM = (Get-VM)
+	)
+	
+	Process
+	{
+		$result = $VM | Get-View  -Property Name,Config.LatencySensitivity |
+		Select Name,@{N='LatencySensitivity';E={$_.Config.LatencySensitivity.Level}} 
+		$result
+	}
+}
+
+
+Function Get-VMLatencySensitivityBulk {
+<#
+.SYNOPSIS
+	Get virtual machine latency sensitivity level.
+.DESCRIPTION
+	This function returns the latency sensitivity level of all virtual machine in the inventory.
+	You can adjust the latency sensitivity of a virtual machine to optimize the scheduling delay 
+	for latency sensitive applications.
+	
+	This function is suitable for a large inventory.
+	
+	When the function is called without parameters it will return all Virtual Machines.
+.PARAMETER hidenormal
+	Hide Virtual Machines with default latancy sensitivity (normal)
+.EXAMPLE
+	Get-VMLatencySensitivityBulk
+.EXAMPLE
+	Get-VMLatencySensitivityBulk -hideNormal |Set-VMLatencySensitivity -Level normal
+.NOTES
+	Author:   Florian Grehl
+	Twitter:  @virten
+	Website:  www.virten.net
+	
+	Changelog:
+	2017-10-15 - v1.0 - Initial Release
+
+.LINK
+	http://www.virten.net/2017/10/get-and-set-vmlatencysensitivity-powershell-function/
+#>
+	[CmdletBinding()]
+	Param(
+		[switch]$hideNormal
+	)
+	
+	Process
+	{
+		$result = Get-View -ViewType VirtualMachine -Property Name,Config.LatencySensitivity |
+		Select Name,@{N='LatencySensitivity';E={$_.Config.LatencySensitivity.Level}} 
+
+		if ($hideNormal){
+			$result |? {$_."LatencySensitivity" -notcontains "normal"}
+		}else{
+			$result
+		}
+	}
+}
+
+
+Function Set-VMLatencySensitivity {
+<#
+.SYNOPSIS
+	Set virtual machine latency sensitivity level.
+.DESCRIPTION
+	This function returns the latency sensitivity level of a virtual machine.
+	You can adjust the latency sensitivity of a virtual machine to optimize the scheduling delay 
+	for latency sensitive applications.
+	
+	When the function is called without parameters it will return all Virtual Machines.
+.PARAMETER VM
+	Virtual Machine Object returned by the Get-VM cmdlet
+.PARAMETER Level
+	Latency Sensitivity level to configure ("low","normal","medium" or "high")
+.EXAMPLE
+	Get-VM app01 | Set-VMLatencySensitivity -Level low
+.EXAMPLE
+	Get-VMLatencySensitivity |? {$_.LatencySensitivity -notmatch "normal"} |Set-VMLatencySensitivity -Level normal
+.NOTES
+	Author:   Florian Grehl
+	Twitter:  @virten
+	Website:  www.virten.net
+	
+	Changelog:
+	2017-10-15 - v1.0 - Initial Release
+
+.LINK
+	http://www.virten.net/2017/10/get-and-set-vmlatencysensitivity-powershell-function/
+#>
+	[CmdletBinding()]
+	Param(
+		[Parameter(Mandatory=$true,ValueFromPipeline=$true)]$VM,
+		[Parameter(Mandatory=$true)][ValidateSet("low","normal","medium","high")]$Level
+	)
+
+    Process
+	{
+		try{
+			$ObjVm = Get-VM -Name $VM.Name
+		}catch{
+			Write-Verbose "VM Value from interactive input"
+		}
+
+		$VirtualMachineConfigSpec = New-Object VMware.Vim.VirtualMachineConfigSpec
+		$VirtualMachineConfigSpec.LatencySensitivity = New-Object VMware.Vim.LatencySensitivity
+		$VirtualMachineConfigSpec.LatencySensitivity.Level = [VMware.Vim.LatencySensitivitySensitivityLevel]::$Level
+		Write-Verbose "Virtual Machine $($VM.Name): Setting Latency Sensitivity to $($Level)"
+		$ObjVm.ExtensionData.ReconfigVM($VirtualMachineConfigSpec)
+	}
+}
