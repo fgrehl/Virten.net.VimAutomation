@@ -539,6 +539,7 @@ Function Set-VMLatencySensitivity {
 			$ObjVm = Get-VM -Name $VM.Name
 		}catch{
 			Write-Verbose "VM Value from interactive input"
+			$ObjVm = Get-VM -Name $VM    
 		}
 
 		$VirtualMachineConfigSpec = New-Object VMware.Vim.VirtualMachineConfigSpec

@@ -25,7 +25,7 @@ Activate the module with `Import-Module Virten.net.VimAutomation -Force -Verbose
 
 ## Changelog
 
-### 1.3.0
+### 1.3.0 - 2017-10-15
 - Added Set-VMLatencySensitivity function
 - Added Get-VMLatencySensitivity function
 - Added Get-VMLatencySensitivityBulk function
