@@ -503,11 +503,10 @@ Function Set-VMLatencySensitivity {
 .SYNOPSIS
 	Set virtual machine latency sensitivity level.
 .DESCRIPTION
-	This function returns the latency sensitivity level of a virtual machine.
+	This function changes the latency sensitivity level of a virtual machine.
 	You can adjust the latency sensitivity of a virtual machine to optimize the scheduling delay 
 	for latency sensitive applications.
 	
-	When the function is called without parameters it will return all Virtual Machines.
 .PARAMETER VM
 	Virtual Machine Object returned by the Get-VM cmdlet
 .PARAMETER Level
